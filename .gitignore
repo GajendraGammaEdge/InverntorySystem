@@ -1,0 +1,4 @@
+*./.env
+*./env
+*./pyvenv.cfg
+*./External Libraries
