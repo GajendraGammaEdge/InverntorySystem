@@ -16,7 +16,7 @@ def action_on(ch, method, properties, body):
     action_data = json.loads(body)
     print("Message is being received")
     response_mes = process_action(action_data)
-    rabbitMq = RabbitManagerMQ(host="rabbitmq", username="Gajendra@9109", password="123456")
+    rabbitMq = RabbitManagerMQ(host="rabbitmq", username="gajendra9109", password="123456")
     rabbitMq.publish_message("publish_message", response_mes)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
@@ -45,7 +45,7 @@ class RabbitManagerMQ:
             connection.close()
 
 def start_consuming():
-    rabbitMq = RabbitManagerMQ(host="rabbitmq", username="Gajendra@9109", password="123456")
+    rabbitMq = RabbitManagerMQ(host="rabbitmq", username="gajendra9109", password="123456")
     connection = rabbitMq.connection_check()
     channel = connection.channel()
 
@@ -54,9 +54,6 @@ def start_consuming():
     print("Starting to consume messages...")
     channel.start_consuming()
 
-@app.get("/receive")
-async  def getting_message():
-    return start_consuming();
 
 if __name__ == '__main__':
-        getting_message()
+       start_consuming()
