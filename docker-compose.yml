@@ -1,0 +1,56 @@
+#version: "3.2"
+networks:
+   rabbit_network:
+     driver: bridge
+
+services:
+  rabbitmq:
+    image: rabbitmq
+    networks:
+      - rabbit_network
+    ports:
+      - "5671:5671"
+      - "5672:5672"
+      - "15691:15691"
+      - "15692:15692"
+
+    environment:
+        RABBITMQ_DEFAULT_USER: gajendra9109
+        RABBITMQ_DEFAULT_PASS: 123456
+    healthcheck:
+      test: ["CMD","rabbitmq-diagnostics","ping"]
+      timeout: 20s
+      interval: 10s
+      retries: 4
+      start_period: 10s
+    volumes:
+         -  /var/lib/rabbitmq
+
+  producer:
+    build:
+     context : ./Producer
+     dockerfile: Dockerfile
+    networks:
+       - rabbit_network
+    ports:
+      - 8080:8080
+    environment:
+      RABBITMQ_DEFAULT_USER: gajendra9109
+      RABBITMQ_DEFAULT_PASS: 123456
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+
+  consumer :
+    build:
+       context: ./Consumer
+       dockerfile : Dockerfile
+    networks:
+        - rabbit_network
+    environment:
+      RABBITMQ_DEFAULT_USER : gajendra9109
+      RABBITMQ_DEFAULT_PASS : 123456
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
