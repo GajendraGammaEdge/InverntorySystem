@@ -1,0 +1,5 @@
+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
+
+pip install -qU "langchain[google-genai]"
+pip install -qU langchain_community wikipedia langsmith
+pip install langchain langchain-community langchain-google-genai faiss-cpu
